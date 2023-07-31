@@ -1,15 +1,9 @@
 # Art Generator
 
-## db
+ジェネレイティブアートを作るためのWebアプリケーション
 
-DBに入る
+## 起動方法
 
-```bash
-psql -d art_generator_db -U art-generator_user
-```
-
-スキーマの設定
-
-```bash
-SET search_path = art_generator;
+```shell
+docker-compose up -d
 ```
