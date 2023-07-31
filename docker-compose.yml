@@ -1,0 +1,56 @@
+version: '3'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+      target: $TARGET
+    environment:
+      TZ: "Asia/Tokyo"
+    image: art-generator_backend
+    container_name: art-generator_backend
+    restart: always
+    ports:
+      - 5100:5100
+      - 5000:5000
+    volumes:
+      - ./backend:/app
+    tty: true
+
+  nginx:
+    container_name: art-generator_nginx
+    build:
+      context: .
+      dockerfile: nginx/Dockerfile
+    image: art-generator_nginx
+    depends_on:
+      - "frontend"
+      - "backend"
+    ports:
+      - $HOST_PORT:80
+    tty: true
+    environment:
+      TZ: "Asia/Tokyo"
+    volumes:
+      - ./nginx/conf:/etc/nginx
+    links:
+      - frontend:art-generator_frontend
+      - backend:art-generator_backend
+
+  frontend:
+    build:
+      context: .
+      dockerfile: ./frontend/Dockerfile
+      args:
+        HOST_ADDRESS: $HOST_ADDRESS
+        PORT: $HOST_PORT
+    image: art-generator_frontend
+    container_name: art-generator_frontend
+    tty: true
+    volumes:
+      - ./frontend/public:/usr/src/app/art-generator/public
+      - ./frontend/src:/usr/src/app/art-generator/src
+    environment:
+      - TZ=Asia/Tokyo
+      - CHOKIDAR_USEPOLLING=true

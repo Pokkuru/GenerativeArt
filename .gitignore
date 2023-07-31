@@ -1,0 +1,10 @@
+/data
+.env
+*.zip
+/backend/Module/__pycache__/
+/backend/*material/*.png
+/backend/*/*.png
+/backend/*/*.xlsm
+*.pyc
+*.csv
+frontend/build/*
